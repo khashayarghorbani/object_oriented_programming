@@ -1,0 +1,9 @@
+#pragma once
+#include <iostream> 
+#include <vector>
+#include <cstring>
+#include <cctype>
+#include <string>
+void menu();
+void convert();
+void key();
