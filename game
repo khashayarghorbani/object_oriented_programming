@@ -1,0 +1,409 @@
+//
+//  main.cpp
+//  theGame
+//
+//  Created by Khashayar Ghorbani on 2020-06-03.
+//  Copyright © 2020 Khashayar Ghorbani. All rights reserved.
+//
+
+#include <iostream>
+void moveFunction();
+int point;
+class Grid{
+public:
+    
+    int cells[16][16]{0};
+    
+    void map(){
+        std::cout<<"\t \t Col 1 \tCol 2 \tCol 3 \tCol 4 \tCol 5 \tCol 6 \tCol 7 \tCol 8\n";
+        
+            for (size_t i = 0; i < 16; i++)
+            {
+        
+                std::cout<<"Row " << i+1<<"";
+        
+                for (size_t j = 0; j < 8; j++)
+                {
+        
+                    std::cout<<"\t\t"<< cells[i][j];
+        
+                }
+                std::cout<<std::endl;
+            }
+            std::cout<<std::endl;
+        
+           std::cout<<"\t \t col 9 \tcol 10 \tcol 11 \tcol 12\t col 13 \tcol 14 \tcol 15 \tcol 16\n";
+        
+            for (size_t i = 0; i < 16; i++)
+            {
+        
+                std::cout<<"Row " << i+1<<"";
+        
+                for (size_t j = 8; j < 16; j++)
+                {
+        
+                    std::cout<<"\t\t"<< cells[i][j];
+        
+                }
+                std::cout<<std::endl;
+            }
+            std::cout<<std::endl;
+    }
+
+    Grid(){};
+    ~Grid(){};
+};
+Grid *newG = new Grid;
+
+class Cells{
+private:
+    int point;
+    
+public:
+    void setPoint(int point){
+        this->point = point;
+    }
+    int getPoint(){return point;}
+    
+    void random(){
+        srand((unsigned) time(0));
+             int fill1 = 200;
+             int fill2 = 100 ;
+             int test = 0;
+             int x = 0;
+             int y = 0;
+           x = (rand() % 15) + 0;
+             y = (rand() % 15) + 0;
+             newG->cells[x][y] +=1;
+                 
+           while (fill2 >1) {
+             
+                 for (int index = 0; index < fill1; index++) {
+                      
+                     x = (rand() % 15) + 0;
+                      for (int i = 0; i < fill1; i++) {
+                      y = (rand() % 15) + 0;
+                      }
+                      if (newG->cells[x+1][y] == 1 || newG->cells[x][y+1] == 1 || newG->cells[x][y-1] == 1 || newG->cells[x-1][y]==1) {
+                          if (newG->cells[x][y] == 0) {
+                              if (fill2>0) {
+                              newG->cells[x][y] +=1;
+                              fill2 -= 1;
+                              }
+                          }
+                         
+                              
+                             test +=1;
+                      }
+                      
+                  }
+                      
+                      
+             }
+    }
+    Cells(){};
+    ~Cells(){};
+        
+};
+Cells *newC = new Cells;
+void left(int row,int col){
+    if (newG->cells[row][col-2] ==0 && newG->cells[row][col-1] == 1 && newG->cells[row][col-1] != newG->cells[row][0]) {
+        newG->cells[row][col-1] -=1;
+        newG->cells[row][col-2] +=1;
+        point++;
+        newC->setPoint(point);
+        std::cout<<"congrats!!\nPOINTS: "<< newC->getPoint() << std::endl;
+        moveFunction();
+    }else{
+        std::cout<<"You can't move the stone to this location. try again"<<std::endl;
+        moveFunction();
+        
+    }
+}
+void right(int row,int col){
+    if (newG->cells[row][col+2] == 0 && newG->cells[row][col+1] == 1 && newG->cells[row][col+1] != newG->cells[row][15] ) {
+        newG->cells[row][col+1] -=1;
+        newG->cells[row][col+2] +=1;
+        point++;
+        newC->setPoint(point);
+        
+                    std::cout<<"congrats!!\nPOINTS: "<< newC->getPoint() << std::endl;
+        moveFunction();
+                   } else{
+                       std::cout<<"You can't move the stone to this location. try again"<<std::endl;
+                       moveFunction();
+                       
+                   }
+}
+void down(int row,int col){
+    if (newG->cells[row+2][col] ==0 && newG->cells[row+1][col] == 1 && newG->cells[row +1][col]!=newG->cells[15][col]) {
+        newG->cells[row+1][col] -=1;
+        newG->cells[row+2][col] +=1;
+        point++;
+        newC->setPoint(point);
+        
+        std::cout<<"congrats!!\nPOINTS: "<< newC->getPoint() << std::endl;
+        moveFunction();
+    }
+    else{
+        std::cout<<"You can't move the stone to this location. try again"<<std::endl;
+        moveFunction();
+    
+    }
+}
+void up(int row,int col){
+    if (newG->cells[row-1][col] ==1 && newG->cells[row-2][col] == 0 && newG->cells[row-1][col]!=newG->cells[0][col]) {
+        newG->cells[row-1][col] -=1;
+        newG->cells[row-2][col] +=1;
+        point++;
+        newC->setPoint(point);
+        std::cout<<"congrats!!\nPOINTS: "<< newC->getPoint() << std::endl;
+        moveFunction();
+    }else{
+        std::cout<<"You can't move the stone to this location. try again"<<std::endl;
+        moveFunction();
+    }
+}
+void moveFunction(){
+    int row,col,position;
+    newG->map();
+    std::cout<<"Which stone do you want to pick?"<<std::endl;
+    std::cout<<"please enter the row of your stone:"<<std::endl;
+    std::cin>>row;
+    row -= 1;
+    std::cout<<"please enter the coloumn of your stone:"<<std::endl;
+    std::cin>>col;
+    col -= 1;
+    //EDGE NORTH WEST
+        if ((newG->cells[row][col] == newG->cells[0][0] && newG->cells[row][col] == 1)) {
+            std::cout<<"which where you want to go?"<<std::endl;
+            std::cout<<"1-DOWN"<<std::endl;
+            std::cout<<"2-RIGHT"<<std::endl;
+            std::cin>>position;
+            switch (position) {
+                case 1:
+                    down(row,col);
+
+                    break;
+                    
+                    
+                case 2:
+                    right(row,col);
+                    break;
+                    
+                default:
+                    std::cout<<"Invalid Input,please try again"<<std::endl;
+                    moveFunction();
+                    break;
+            }
+                   
+        }
+        //EDGE NOURTH EAST
+        if (newG->cells[row][col] == newG->cells[0][15] && newG->cells[row][col] == 1) {
+            std::cout<<"which where you want to go?"<<std::endl;
+            std::cout<<"1-DOWN"<<std::endl;
+            std::cout<<"2-LEFT"<<std::endl;
+            std::cin>>position;
+            switch (position) {
+                case 1:
+                    down(row,col);
+                         break;
+                    
+                case 2:
+                    left(row,col);
+                    break;
+                    
+                default:
+                    std::cout<<"Invalid Input,please try again"<<std::endl;
+                    moveFunction();
+                    break;
+            }
+        }
+        //EDGE SOUTH WEST
+        if (newG->cells[row][col] == newG->cells[15][0] && newG->cells[row][col] == 1) {
+            std::cout<<"which where you want to go?"<<std::endl;
+            std::cout<<"1-UP"<<std::endl;
+            std::cout<<"2-RIGHT"<<std::endl;
+            std::cin>>position;
+                switch (position) {
+                    case 1:
+                        up(row,col);
+                        break;
+                        
+                    case 2:
+                        right(row,col);
+                        break;
+                    default:
+                        std::cout<<"Invalid Input,please try again"<<std::endl;
+                        moveFunction();
+                        break;
+            }
+        }
+        //EDGE SOUTH EAST
+        if (newG->cells[row][col] == newG->cells[15][15] && newG->cells[row][col] == 1) {
+            std::cout<<"which where you want to go?"<<std::endl;
+            std::cout<<"1-UP"<<std::endl;
+            std::cout<<"2-LEFT"<<std::endl;
+            std::cin>>position;
+                switch (position) {
+                    case 1:
+                        up(row,col);
+                        break;
+                        
+                    case 2:
+                        left(row,col);
+                        break;
+                    default:
+                        std::cout<<"Invalid Input,please try again"<<std::endl;
+                        moveFunction();
+                        break;
+            }
+        }
+        //EDGE NORTH
+        if (newG->cells[row][col] == newG->cells[0][col] && newG->cells[row][col] == 1 ) {
+            std::cout<<"which where you want to go?"<<std::endl;
+            std::cout<<"1-DOWN"<<std::endl;
+            std::cout<<"2-RIGHT"<<std::endl;
+            std::cout<<"3-LEFT"<<std::endl;
+            std::cin>>position;
+            switch (position) {
+                case 1:
+                    down(row,col);
+                    break;
+                    
+                case 2:
+                    right(row,col);
+                    break;
+                case 3:
+                    left(row,col);
+                    break;
+                    
+                   
+                    
+                default:
+                    std::cout<<"Invalid Input,please try again"<<std::endl;
+                    moveFunction();
+                    break;
+        }
+    }
+     //EDGE WEST
+        if (newG->cells[row][col] == newG->cells[row][0] && newG->cells[row][col] == 1) {
+            std::cout<<"which where you want to go?"<<std::endl;
+                   std::cout<<"1-UP"<<std::endl;
+                   std::cout<<"2-DOWN"<<std::endl;
+                   std::cout<<"3-RIGHT"<<std::endl;
+                   std::cin>>position;
+                   switch (position) {
+                       case 1:
+                           up(row,col);
+                           break;
+                           
+                       case 2:
+                           down(row,col);
+                           break;
+                       case 3:
+                           right(row,col);
+                           break;
+                           
+                          
+                           
+                       default:
+                           std::cout<<"Invalid Input,please try again"<<std::endl;
+                           moveFunction();
+                           break;
+               }
+        }
+        //EDGE EAST
+        if (newG->cells[row][col] == newG->cells[row][15] && newG->cells[row][col] == 1) {
+            std::cout<<"which where you want to go?"<<std::endl;
+                   std::cout<<"1-UP"<<std::endl;
+                   std::cout<<"2-DOWN"<<std::endl;
+                   std::cout<<"3-LEFT"<<std::endl;
+                   std::cin>>position;
+                   switch (position) {
+                       case 1:
+                           up(row,col);
+                           break;
+                           
+                       case 2:
+                           down(row,col);
+                           break;
+                       case 3:
+                           left(row,col);
+                           break;
+                           
+                          
+                           
+                       default:
+                           std::cout<<"Invalid Input,please try again"<<std::endl;
+                           moveFunction();
+                           break;
+               }
+        }
+        //EDGE SOUTH
+        if (newG->cells[row][col] == newG->cells[15][col] && newG->cells[row][col] == 1) {
+            std::cout<<"which where you want to go?"<<std::endl;
+                   std::cout<<"1-UP"<<std::endl;
+                   std::cout<<"2-RIGHT"<<std::endl;
+                   std::cout<<"3-LEFT"<<std::endl;
+                   std::cin>>position;
+                   switch (position) {
+                       case 1:
+                           up(row,col);
+                           break;
+                           
+                       case 2:
+                           right(row, col);
+                           break;
+                       case 3:
+                           left(row,col);
+                           break;
+                           
+                          
+                           
+                       default:
+                           std::cout<<"Invalid Input,please try again"<<std::endl;
+                           moveFunction();
+                           break;
+               }
+        }
+        if (newG->cells[row][col] == 1) {
+            std::cout<<"which where you want to go?"<<std::endl;
+                   std::cout<<"1-UP"<<std::endl;
+                   std::cout<<"2-DOWN"<<std::endl;
+                   std::cout<<"3-RIGHT"<<std::endl;
+                   std::cout<<"4-LEFT"<<std::endl;
+                   std::cin>>position;
+                   switch (position) {
+                       case 1:
+                           up(row,col);
+                           break;
+                       case 2:
+                           down(row,col);
+                           break;
+                       case 3:
+                           right(row, col);
+                           break;
+                       case 4:
+                           left(row, col);
+                           break;
+                       default:
+                           std::cout<<"Invalid Input,please try again"<<std::endl;
+                           moveFunction();
+                           break;
+                   }
+        } else{
+            std::cout<<"sorry there is no stone to pick. try again."<<std::endl;
+            moveFunction();
+            
+    }
+    
+    
+}
+int main(int argc, const char * argv[]) {
+    newC->random();
+    moveFunction();
+    
+    
+    return 0;
+}
